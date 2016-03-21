@@ -1,0 +1,38 @@
+//leetcode #3 Longest Substring Without Reapting Characters
+
+//用一张hash表记录每个字符出现的次数，当有一个字符出现两次时，结束。记录此时符合要求的子字符串字符数，并与最大值比较。
+//从前面的重复字符后一个字符开始重新计数。
+//字符自带hash表，也即ASCII码
+
+class Solution{
+public:
+    int lengthOfLongestSubstring(string s) {
+        if(s.size()==0) return 0;
+        
+        int maxlength=0;
+        int length=s.size();
+        int i=0;
+        while(i<length){
+            int tlength=0;
+            int charnum[300]={0};
+            int j=i;
+            while(j<length){
+                char c=s[j];
+                if(charnum[c]!=0){
+                    tlength=j-i;
+                    if(tlength>maxlength) maxlength=tlength;
+                    i=charnum[c];
+                    break;
+                }
+                charnum[c]=j+1;
+                j++;
+            }
+            if(j==length){
+                tlength=j-i;
+                if(tlength>maxlength) maxlength=tlength;
+                break;
+            }
+        }
+        return maxlength;
+    }
+};
