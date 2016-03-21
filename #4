@@ -1,0 +1,61 @@
+//#4 Median of Two Sorted Arrays
+
+//因为时间复杂度要求为log(m+n)，常规的merge算法不能使用。
+//要寻找的是最中间的元素（假设为k），只要把比中间元素小的元素全部去掉
+//每次去掉一半（数组1的前k/2或者数组2的前k/2）当去掉的元素个数符合要求时，可以得到中位数
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int length1=nums1.size();
+        int length2=nums2.size();
+        int total=length1+length2;
+        if(total%2==1) return GetTarget(nums1,nums2,total/2+1);
+        else return (GetTarget(nums1,nums2,total/2)+GetTarget(nums1,nums2,total/2+1))/2;
+    }
+
+private:
+    double GetTarget(vector<int>& nums1, vector<int>& nums2, int index){
+        int length1=nums1.size();
+        int length2=nums2.size();
+        
+        if(length1==0) return nums2[index-1];
+        if(length2==0) return nums1[index-1];
+        if(index==1) return nums1[0]<nums2[0]?nums1[0]:nums2[0];
+        
+        int h1=1;
+        int h2=1;
+        int t1=length1;
+        int t2=length2;
+        int tmed=index;
+        
+        while(tmed>0){
+            if(length1-h1<0) return nums2[tmed-1];
+            if(length2-h2<0) return nums1[tmed-1];
+            if(tmed==1) return nums1[h1-1]<nums2[h2-1]?nums1[h1-1]:nums2[h2-1];
+            int k=tmed/2;
+            if((length2-h2)>(length1-h1)){
+                if(length1-h1<k) k=max(length1-h1,1);
+                if(nums1[h1-1+k-1]<nums2[h2-1+tmed-k-1]){
+                    h1=h1+k;
+                    tmed=tmed-k;
+                }
+                else{
+                    h2=h2+tmed-k;
+                    tmed=k;
+                }
+            }
+            else{
+                if(length2-h2<k) k=max(length2-h2,1);
+                if(nums1[h1-1+tmed-k-1]<nums2[h2-1+k-1]){
+                    h1=h1+tmed-k;
+                    tmed=k;
+                }
+                else{
+                    h2=h2+k;
+                    tmed=tmed-k;
+                }
+            }
+        }
+    }
+};
