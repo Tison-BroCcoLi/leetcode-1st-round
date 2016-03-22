@@ -1,0 +1,55 @@
+//#6 ZigZag Coversion
+
+//除了rows==1以外，每2rows-2个字符构成一个循环。
+//每个循环中，第一行和最后一行稍微特别，每个循环只有一个字符，分别是第(2rows-2)*k个字符和rows-1+(2rows-2)*k个字符
+//其他行每行有两个元素，分别为rowNo-1+(2rows-2)*k个字符和2rows-2-(rowNo-1)+(2rows-2)*k个字符
+//按序添加到结果字符串中就可以
+
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if(numRows==1) return s;
+        
+        string res=s;
+        int length=s.size();
+        int k=0;
+        int i=0;
+        int temprow=1;
+        
+        //Row 1
+        while((2*numRows-2)*k<length){
+            res[i]=s[(2*numRows-2)*k];
+            i++;
+            k++;
+        }
+        temprow++;
+        
+        //Row 2 ~ Row (numRows-1)
+        while(temprow<numRows){
+            k=0;
+            while(temprow-1+(2*numRows-2)*k<length){
+                res[i]=s[temprow-1+(2*numRows-2)*k];
+                i++;
+                if(2*numRows-2-(temprow-1)+(2*numRows-2)*k<length){
+                    res[i]=s[2*numRows-2-(temprow-1)+(2*numRows-2)*k];
+                    i++;
+                    k++;
+                }
+                else{
+                    break;
+                }
+            }
+            temprow++;
+        }
+        
+        //Row numRows
+        k=0;
+        while(numRows-1+(2*numRows-2)*k<length){
+            res[i]=s[numRows-1+(2*numRows-2)*k];
+            i++;
+            k++;
+        }
+        
+        return res;
+    }
+};
