@@ -1,0 +1,54 @@
+//#7 Reverse Integer
+
+//判断正负，取绝对值
+//若原数小于10或者等于0,直接输出
+//对10取模,得到末位数字，也是新数字的第一位数字，若为0则舍弃，然后对数字除以10，重复操作
+//将所得的每一位数字及对应的权重加起来
+//数据溢出的问题要当心！尤其注意负值的最大值比正值要大1，那个最大的负值单独处理
+
+class Solution {
+public:
+    int reverse(int x) {
+        if(x==0) return x;
+        if(x==-2147483648) return 0;
+        
+        bool isPositive=true;
+        int temp=x;
+        if(x<0){
+            isPositive=false;
+            temp=-x;
+        }
+        
+        if(temp<10){
+            if(isPositive) return temp;
+            else return -temp;
+        }
+        
+        long answer=0;
+        int dig[20];
+        int index=0;
+        int length=0;
+        int tempmold=0;
+        while(temp>=10){
+            tempmold=temp%10;
+            if(index==0 && tempmold==0){
+                temp=temp/10;
+                continue;
+            }
+            dig[index]=tempmold;
+            index++;
+            temp=temp/10;
+        }
+        dig[index]=temp;
+        index++;
+        
+        for(int i=0;i<index;i++){
+            answer+=dig[i]*pow(10,index-1-i);
+        }
+        
+        if(answer>INT_MAX) return 0;
+        
+        if(isPositive) return answer;
+        else return -answer;
+    }
+};
