@@ -1,0 +1,51 @@
+//#8 String to Integer
+
+//算法比较简单，考虑到各种类型的输入
+//需要把开头的空格去掉
+//开头只能是数字或者正负号，需要记录数字的符号
+//当数字越界时，用界限表达，用long long 类型存储答案，防止溢出
+//输入没有数字时返回零
+//连续读入数字，到第一个非数字字符或者长度明显超过int界限时结束
+
+class Solution {
+public:
+    int myAtoi(string str) {
+        long long res=0;
+        int length=str.size();
+        
+        bool isPositive=true;
+        int i=0;
+        while(str[i]==' '){
+            i++;
+            continue;
+        }
+        char c=str[i];
+        if(c=='+') i++;
+        if(c=='-'){
+            i++;
+            isPositive=false;
+        }
+        
+        int* pnum=new int[length];
+        int index=0;
+        while(str[i]>='0' && str[i]<='9'){
+            pnum[index]=str[i]-'0';
+            index++;
+            if(index>14) break;
+            i++;
+        }
+        
+        if(index==0) return 0;
+        
+        for(int j=0;j<index;j++){
+            res+=pnum[j]*pow(10.0,index-1-j);
+        }
+        
+        if(isPositive==false) res=-res;
+        
+        if(res>INT_MAX) return INT_MAX;
+        if(res<INT_MIN) return INT_MIN;
+        
+        return res;
+    }
+};
