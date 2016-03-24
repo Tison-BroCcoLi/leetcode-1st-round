@@ -18,3 +18,53 @@
 //5.依次比较直到s字符串结束
  
  //Code too long!! =-=!
+ 
+ //参考了网上的答案，采用递归的思路
+ //1.当s结束时，p也需要结束，或者当p未结束时，p只能是间隔'*'的形式
+ //2.当s未结束而p结束时，无法匹配
+ //3.s和p均为结束，如果p的下一位不为'*'，则比较当前位，不同则不匹配，相同则都递归到下一位的比较
+ //                如果p的下一位为'*'，则p及其后面的'*'可以匹配s中从0开始任意多（记为i）等于p的字符，递归到s+i和p+2的比较
+ 
+ class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int slen=s.size();
+        int plen=p.size();
+        
+        if(slen==0){
+            if(plen==0) return true;
+            else{
+                if(plen%2==1) return false;
+                else{
+                    int i=1;
+                    while(i<plen){
+                        char c=p[i];
+                        if(p[i]!='*') return false;
+                        i+=2;
+                    }
+                    return true; 
+                }
+            }
+        }
+        
+        else if(slen!=0 && plen==0) return false;
+        
+        else{
+            if(plen<1 || p[1]!='*'){
+                if(p[0]!=s[0] && p[0]!='.') return false;
+                else return isMatch(s.substr(1,slen-1),p.substr(1,plen-1));
+            }
+            else{
+                int i=0;
+                if(s[i]!=p[0] && p[0]!='.') return isMatch(s,p.substr(2,plen-2));
+                if(isMatch(s,p.substr(2,plen-2))) return true;
+                while(s[i]==p[0] || p[0]=='.'){
+                    if(isMatch(s.substr(i+1,slen-i-1),p.substr(2,plen-2))) return true;
+                    if(i==slen-1) break;
+                    i++;
+                }
+                return false;
+            }
+        }
+    }
+};
