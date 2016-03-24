@@ -1,0 +1,26 @@
+//#11 Container With Most Water
+
+//平凡的算法的时间复杂度是O(n2)
+
+//考虑前后两个指针，从两头向中心移动，可以移动头指针，也可以移动尾指针，结果都会使得矩形的长度减少1，那么就该移动高度小
+//的那个，因为另一个即使高度变高了，也没有使得面积变得更大，而只可能会使面积变小（最多相同）
+
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int area_max=0;  
+        int area_tmp=0;  
+        int i=0;  
+        int j=(int)height.size()-1;  
+        while(i<j) {  
+            area_tmp = (j-i)*(height[i]<height[j]?height[i]:height[j]);  
+            if(area_tmp>area_max)  
+                area_max=area_tmp;  
+            if(height[j]>height[i])  
+                i++;  
+            else  
+                j--;  
+        }  
+        return area_max;  
+    }
+};
