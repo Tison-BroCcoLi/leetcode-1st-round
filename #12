@@ -1,0 +1,79 @@
+//#12 Integer to Roman
+
+//比较简单
+
+class Solution {
+public:
+    string intToRoman(int num) {
+        string res;
+        string thos;
+        string huns;
+        string tens;
+        string ones;
+        if(num>=1000){
+            thos=getthos(num);
+            res=thos;
+        }
+        
+        num=num%1000;
+        
+        if(num>=100){
+            huns=getbit(num,3);
+            res+=huns;
+        }
+        
+        num=num%100;
+        
+        if(num>=10){
+            tens=getbit(num,2);
+            res+=tens;
+        }
+        
+        num=num%10;
+        
+        if(num>=1){
+            ones=getbit(num,1);
+            res+=ones;
+        }
+        
+        return res;
+    }
+
+private:
+    string getthos(int num){
+        string res;
+        num=num/1000;
+        switch(num){
+            case 1: res="M"; break;
+            case 2: res="MM"; break;
+            case 3: res="MMM"; break;
+        }
+        return res;
+    }
+    
+    string getbit(int num, int mode){
+        string res;
+        string s1;
+        string s2;
+        string s3;
+        int tnum=0;
+        switch(mode){
+            case 3: s1="M";s2="D";s3="C";tnum=num/100;break;
+            case 2: s1="C";s2="L";s3="X";tnum=num/10;break;
+            case 1: s1="X";s2="V";s3="I";tnum=num;break;
+        }
+        
+        switch(tnum){
+            case 9: res=s3+s1;break;
+            case 8: res=s2+s3+s3+s3;break;
+            case 7: res=s2+s3+s3;break;
+            case 6: res=s2+s3;break;
+            case 5: res=s2;break;
+            case 4: res=s3+s2;break;
+            case 3: res=s3+s3+s3;break;
+            case 2: res=s3+s3;break;
+            case 1: res=s3;break;
+        }
+        return res;
+    }
+};
