@@ -1,0 +1,55 @@
+// 3Sum Closest
+
+//排序，从最小的数开始，取剩下的数的最大最小值，当结果等于target，返回target
+//当结果超过target后，记录差值，更新答案，大数前移，当结果小于target时，记录差值，更新答案，小数后移
+//时间复杂度O(n^2)
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        int nlen=nums.size();
+        //if(nlen<3) return;
+        
+        if(nlen==3) return nums[0]+nums[1]+nums[2];
+        std::sort(nums.begin(),nums.end());
+        
+        if(nums[0]+nums[1]+nums[2]>=target) return nums[0]+nums[1]+nums[2];
+        if(nums[nlen-3]+nums[nlen-2]+nums[nlen-1]<=target){
+            return nums[nlen-3]+nums[nlen-2]+nums[nlen-1];
+        }
+        
+        int res=0;
+        int i=0;
+        int j=1;
+        int k=nlen-1;
+        int temp=0;
+        int mindiff=INT_MAX;
+        for(i=0;i<nlen-2;i++){
+            j=i+1;
+            k=nlen-1;
+            while(j<k){
+                if(nums[i]+nums[j]+nums[k]==target) return target;
+                else if(nums[i]+nums[j]+nums[k]>target){
+                    temp=nums[i]+nums[j]+nums[k]-target;
+                    if(temp<mindiff){
+                        mindiff=temp;
+                        res=nums[i]+nums[j]+nums[k];
+                    }
+                    while(nums[k-1]==nums[k] && k>j) k--;
+                    k--;
+                }
+                else{
+                    temp=target-(nums[i]+nums[j]+nums[k]);
+                    if(temp<mindiff){
+                        mindiff=temp;
+                        res=nums[i]+nums[j]+nums[k];
+                    }
+                    while(nums[j+1]==nums[j] && j<k) j++;
+                    j++;
+                }
+            }
+            while(nums[i+1]==nums[i] && i<nlen-2) i++;
+        }
+        return res;
+    }
+};
