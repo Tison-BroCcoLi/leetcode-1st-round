@@ -1,0 +1,54 @@
+//#15 3Sum
+
+//平凡算法，任取两个数，搜索是否有第三个数，时间复杂度O(n^2)
+
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        
+        int nlen=nums.size();
+        if(nlen<3) return res;
+        
+        std::sort(nums.begin(),nums.end());
+        
+        map<int,int> Mymap;
+        for(int i=0;i<nlen;i++){
+            if(Mymap[nums[i]]>=1) Mymap[nums[i]]++;
+            else Mymap[nums[i]]=1;
+        }
+        
+        //if(Mymap[0]>=3){
+        //    res.push_back({0,0,0});
+        //}
+        
+        int i=0;
+        int j=1;
+        for(i=0;i<nlen-2;i++){
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            for(j=i+1;j<nlen-1;j++){
+                if(j>i+1 && nums[j]==nums[j-1]) continue;
+                if(-nums[j]-nums[i]<nums[j]) continue;
+                else if(-nums[j]-nums[i]==nums[j]){
+                    if(nums[j]==0){
+                        if(Mymap[nums[j]]>=3){
+                            res.push_back({nums[i],nums[j],-nums[i]-nums[j]});
+                        }
+                    }
+                    else if(Mymap[nums[j]]>=2){
+                        res.push_back({nums[i],nums[j],-nums[i]-nums[j]});
+                    }
+                    else continue;
+                }
+                else{
+                    if(Mymap[-nums[i]-nums[j]]>=1){
+                        res.push_back({nums[i],nums[j],-nums[i]-nums[j]});
+                    }
+                    else continue;
+                }
+            }
+        }
+        return res;
+    }
+};
