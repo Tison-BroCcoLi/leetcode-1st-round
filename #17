@@ -1,0 +1,46 @@
+//#17 Letter Combinations of a Phone Number
+
+//采用了递归的方法，逐个数字处理
+
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        int length=digits.size();
+        vector<string> res;
+        if(length==0) return res;
+        int index=digits.size()-1;
+        for(index;index>=0;index--){
+            int onenum=digits[index];
+            res=addone(digits[index]-'0',res);
+        }
+        return res;
+    }
+    
+private:
+    vector<string> addone(int n,vector<string> original){
+        string telmap[8]={"abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        string temp=telmap[n-2];
+        int i=1;
+        int length=original.size();
+        if(length>0){
+            while(i<temp.size()){
+                for(int j=0;j<length;j++){
+                    original.push_back(temp[i]+original[j]);
+                }
+                i++;
+            }
+            for(int j=0;j<length;j++){
+                original[j]=temp[0]+original[j];
+            }
+            return original;
+        }
+        else{
+            i=0;
+            while(i<temp.size()){
+                original.push_back(string(1,temp[i]));
+                i++;
+            }
+            return original;
+        }
+    }
+};
