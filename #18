@@ -1,0 +1,42 @@
+//#18 4Sum
+
+//将原数字序列排序，然后按顺序取两位，得出剩下的目标数值，再用2Sum就可以了
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        int length=nums.size();
+        vector<vector<int>> res;
+        
+        if(length<4) return res;
+        
+        sort(nums.begin(),nums.end());
+        
+        for(int i=0;i<length-3;i++){
+            if(i>0 && nums[i]==nums[i-1]) continue;
+            for(int j=i+1;j<length-2;j++){
+                if(j>i+1 && nums[j]==nums[j-1]) continue;
+                int begin=j+1;
+                int end=length-1;
+                while(begin<end){
+                    int tsum=nums[i]+nums[j]+nums[begin]+nums[end];
+                    if(tsum==target){
+                        res.push_back({nums[i],nums[j],nums[begin],nums[end]});
+                        begin++;
+                        end--;
+                        while(nums[begin]==nums[begin-1] && begin<end) begin++;
+                        while(nums[end]==nums[end+1] && begin<end) end--;
+                    }
+                    else if(tsum<target){
+                        begin++;
+                    }
+                    else{
+                        end--;
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+};
