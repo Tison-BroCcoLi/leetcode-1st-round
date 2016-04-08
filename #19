@@ -1,0 +1,47 @@
+//#19 Remove Nth Node From End of List
+
+//只用一次循环就找到倒数第n个节点是问题的关键，用两个指针，第一个指针先走n步，然后两指针同时走，当指针1走到底时，指针2恰好在倒数第n步
+//但感觉没意义=-=，指针走的次数其实是一样的，只不过分成了两步走
+//主要删除的节点是首尾的情况
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        if(head==NULL) return NULL;
+        
+        ListNode* p1=head;
+        ListNode* p2=head;
+        ListNode* pformer=head;
+        int i=0;
+        while(i<n){
+            p1=p1->next;
+            i++;
+        }
+        while(p1!=NULL){
+            p1=p1->next;
+            pformer=p2;
+            p2=p2->next;
+        }
+        
+        if(p2==head){
+            p2=p2->next;
+            return p2;
+        }
+        else if(p2->next==NULL){
+            pformer->next=NULL;
+            return head;
+        }
+        else{
+            pformer->next=p2->next;
+            return head;
+        }
+    }
+};
