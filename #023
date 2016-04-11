@@ -1,0 +1,61 @@
+//#23 Merge k Sorted Lists
+
+//最直接的方法就是比较得出k个子列的最小值，逐一添加到结果列中。然而，如果使用最直接的比较法，很遗憾，超时了
+//要优化提取最小值的方法（最小堆、队列优先）
+
+//第二种方法是比较前两个子列，得到一个合并列，然后重复这一过程到只剩一个
+//第三种方法使用递归，将前面一半合并，后面一半合并，然后两个合并
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        int length=lists.size();
+        if(length==0) return NULL;
+        if(length==1) return lists[0];
+        if(length==2) return MergeTwoLists(lists[0],lists[1]);
+        
+        vector<ListNode*> Left(lists.begin(),lists.begin()+length/2);
+        vector<ListNode*> Right(lists.begin()+length/2,lists.end());
+        return MergeTwoLists(mergeKLists(Left), mergeKLists(Right));
+    }
+
+private:
+    ListNode* MergeTwoLists(ListNode* l1, ListNode* l2){
+        if(l1==NULL) return l2;
+        if(l2==NULL) return l1;
+        
+        ListNode* ltemp=l1;
+        ListNode* rtemp=l2;
+        ListNode* nlist=l1;
+        ListNode* temp=nlist;
+        if(l1->val>l2->val){
+            nlist=l2;
+            temp=nlist;
+            rtemp=l2->next;
+        }
+        else ltemp=l1->next;
+        while(ltemp!=NULL && rtemp!=NULL){
+            if(ltemp->val<=rtemp->val){
+                temp->next=ltemp;
+                temp=temp->next;
+                ltemp=ltemp->next;
+            }
+            else{
+                temp->next=rtemp;
+                temp=temp->next;
+                rtemp=rtemp->next;
+            }
+        }
+        if(ltemp==NULL) temp->next=rtemp;
+        if(rtemp==NULL) temp->next=ltemp;
+        return nlist;
+    }
+};
