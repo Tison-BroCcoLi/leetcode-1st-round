@@ -1,0 +1,51 @@
+//#22 Generate Parentheses
+
+//递归，n对括号生成与前n-1对括号的情况息息相关，具体来说，就是将n分解成0+n, 1+(n-1), 2+(n-2), …… ,(n-1)+1种情况
+//0+n是所有n-1对括号外再套一个括号
+//1+(n-1)是1对括号+所有n-1对括号
+//2+(n-2)是"("+所有1对括号的情况+")"+所有n-2对括号的情况
+//……
+//i+(n-i)是"("+所有i-1对括号的情况+")"+所有n-i对括号的情况
+
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if(n<=0){
+            vector<string> res;
+            return res;
+        }
+        if(n==1){
+            vector<string> res;
+            res.push_back("()");
+            return res;
+        }
+        
+        if(n>1){
+            vector<string> res;
+            for(int i=0;i<n;i++){
+                if(i==0){
+                    vector<string> ivec=generateParenthesis(n-1);
+                    for(int j=0;j<ivec.size();j++){
+                        res.push_back("("+ivec[j]+")");
+                        res.push_back("()"+ivec[j]);
+                    }
+                }
+                
+                else if(i==1){
+                    continue;
+                }
+                
+                else{
+                    vector<string> ivec=generateParenthesis(i-1);
+                    vector<string> r_ivec=generateParenthesis(n-i);
+                    for(int j=0;j<ivec.size();j++){
+                        for(int k=0;k<r_ivec.size();k++){
+                            res.push_back("("+ivec[j]+")"+r_ivec[k]);
+                        }
+                    }
+                }
+            }
+            return res;
+        }
+    }
+};
