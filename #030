@@ -1,0 +1,63 @@
+//#030 Substring with Concatenation of All Words
+
+//从s的某一位开始起，每隔字符串长度截取一个子串，判断其是否在words中，用map标记出现的次数
+
+class Solution {
+public:
+    vector<int> findSubstring(string s, vector<string>& words) {
+        int wlen=words[0].size();
+        if(wlen==0){
+            vector<int> res;
+            for(int i=0;i<=s.size();i++){
+                res.push_back(i);
+            }
+            return res;
+        }
+        if(s.size()<wlen*words.size()){
+            vector<int> res;
+            return res;
+        }
+        
+        int len=words.size();
+        vector<int> res;
+        
+        map<string,int> wordmap;
+        for(int i=0;i<len;i++) wordmap[words[i]]++;
+        
+        
+        for(int pos=0;pos<s.size()-wlen+1;pos++){
+            string temp=s.substr(pos,wlen);
+            if(wordmap.find(temp)!=wordmap.end()){
+                map<string,int> testmap;
+                testmap[temp]++;
+                int bnum=0;
+                int index=pos;
+                
+                while(index+wlen<s.size()){
+                    string btemp=s.substr(index+wlen,wlen);
+                    if(wordmap.find(btemp)==wordmap.end()){
+                        break;
+                    }
+                    else{
+                        if(testmap[btemp]<wordmap[btemp]){
+                            testmap[btemp]++;
+                            bnum++;
+                            index+=wlen;
+                            continue;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+                
+                
+                if(bnum+1==len){
+                    res.push_back(pos);
+                }
+            }
+        }
+        
+        return res;
+    }
+};
