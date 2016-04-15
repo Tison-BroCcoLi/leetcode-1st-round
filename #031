@@ -1,0 +1,40 @@
+//#031 Next Permutation
+
+//首先，题目意思是对给定的数组按照字典序给出全排列，找到下一个全排列，如果已经是最后一个了，则返回第一个全排列
+
+//思路是除非原排列已经是一个非升排列，那么就对其进行重排
+//如果不是非升排列，那么从后往前找到第一个不满足非升的元素，从该元素后面找到一个比该元素大且最接近的元素，调换这两个元素
+//然后对该元素位置后面的元素进行升序排列
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int len=nums.size();
+        
+        if(len<=1) return;
+        
+        int index=len-1;
+        while(nums[index]<=nums[index-1] && index>0) index--;
+        
+        if(index==0){
+            sort(nums.begin(),nums.end());
+            return;
+        }
+        
+        int min=nums[index];
+        int minindex=index;
+        for(int j=index+1;j<len;j++){
+            if(nums[j]<min && nums[j]>nums[index-1]){
+                min=nums[j];
+                minindex=j;
+            }
+        }
+        
+        int temp=nums[index-1];
+        nums[index-1]=min;
+        nums[minindex]=temp;
+        
+        sort(nums.begin()+index,nums.end());
+        return;
+    }
+};
