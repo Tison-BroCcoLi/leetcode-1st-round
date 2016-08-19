@@ -1,0 +1,31 @@
+//#032 Longest Valid Parentheses
+
+//想到用栈来维护‘（’，遇到‘（’进栈，遇到‘）’出栈，用l标记子串的起始点
+//为了得到子串长度，出栈时有两种情况，得到一个空栈，则整个是一个符合要求的子串，若不是空栈，则顶端元素之后是一个符合要求的子串。
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        int res = 0, l = 0;
+        stack<int> si;
+        for(int i = 0; i < s.size(); ++ i)
+        {
+            if(s[i] == '(')
+                si.push(i);
+            else
+            {
+                if(si.empty())
+                    l = i + 1;
+                else
+                {
+                    si.pop();
+                    if(si.empty())
+                        res = max(res, i - l + 1);
+                    else
+                        res = max(res, i - si.top());
+                }
+            }
+        }
+        return res;
+    }
+};
