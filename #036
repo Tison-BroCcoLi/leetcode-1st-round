@@ -1,0 +1,54 @@
+//#036 Valid Sudoku
+//分行、列、九宫格对合法性进行检查
+
+class Solution {
+public:
+    int isValidSudoku(vector<vector<char>>& board) {
+        bool res=false;
+        
+        for(int i=0;i<9;i++){
+            vector<char> check=board[i];
+            if(!isValidLine(check)) return false;
+        }
+        
+        for(int i=0;i<9;i++){
+            vector<char> check(9);
+            for(int j=0;j<9;j++){
+                check[j]=board[j][i];
+            }
+            if(!isValidLine(check)) return false;
+        }
+        
+        for(int i=0;i<9;i++){
+            vector <char> check(9);
+            int m=i/3;
+            int n=i%3;
+            for(int x=0;x<9;x++){
+                int p=x/3;
+                int q=x%3;
+                check[x]=board[m*3+p][n*3+q];
+            }
+            if(!isValidLine(check)) return false;
+        }
+        
+        return true;
+    }
+    
+private:
+    bool isValidLine(vector<char>& line) {
+        int mark[9]={0,0,0,0,0,0,0,0,0};
+        for(int i=0;i<9;i++){
+            if(line[i]=='.') continue;
+            
+            int temp=line[i]-'0';
+            if(mark[temp-1]!=0){
+                return false;
+            }
+            else{
+                mark[temp-1]=1;
+            }
+        }
+        
+        return true;
+    }
+};
