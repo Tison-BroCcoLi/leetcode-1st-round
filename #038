@@ -1,0 +1,38 @@
+//#038 Count and Say
+//递归就好了
+
+class Solution {
+public:
+    string countAndSay(int n) {
+        string res="";
+        
+        if(n<=0) return res;
+        
+        if(n==1){
+            res="1";
+            return res;
+        }
+        
+        string last=countAndSay(n-1);
+        int len=last.size();
+        char lastc=last[0];
+        int count=1;
+        for(int i=1;i<len;i++){
+            char tempc=last[i];
+            if(tempc==lastc){
+                count++;
+            }
+            else{
+                char num=count+'0';
+                res+=num;
+                res+=lastc;
+                lastc=tempc;
+                count=1;
+            }
+        }
+        char lastnum=count+'0';
+        res+=lastnum;
+        res+=lastc;
+        return res;
+    }
+};
