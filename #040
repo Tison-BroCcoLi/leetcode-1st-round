@@ -1,0 +1,46 @@
+//#040 CombinationSum II
+//方法与#039类似，用回溯法遍历，此处要注意的是要删掉重复的答案。
+//注意到如果有相同元素，只需要保留第一个该元素的解，后续的解都是重复的
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        
+        vector<int> v;
+        calcombination(v,candidates,target,0);
+        return res;
+    }
+    
+    void calcombination(vector<int>& v, vector<int>& candidates, int target, int cur){
+        if(target==0){
+            res.push_back(v);
+            return;
+        }
+        
+        int i;
+        int n=candidates.size();
+        int last=0;
+        for(i=cur;i<n;i++){
+            if(candidates[i]==last){
+                continue;
+            }
+            else{
+                last=candidates[i];
+            }
+            
+            target-=candidates[i];
+            if(target>=0){
+                v.push_back(candidates[i]);
+                calcombination(v,candidates,target,i+1);
+                v.pop_back();
+            }
+            else{
+                return;
+            }
+            target+=candidates[i];
+        }
+    }
+};
