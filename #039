@@ -1,0 +1,70 @@
+//#039 Combination Sum
+//回溯法遍历元素
+
+class Solution {
+public:
+    vector<vector<int>> res;
+    void combinationSum(vector<int>& v,vector<int>& candidates,int target,int cur){
+        if(target==0){
+            res.push_back(v);
+            return;
+        }
+        int i,n=candidates.size();
+        for(i=cur;i<n;i++){
+            target-=candidates[i];
+            if(target>=0){
+                v.push_back(candidates[i]);
+                combinationSum(v,candidates,target,i);
+                v.pop_back();
+            }
+            else{//剪枝
+                return;
+            }
+            target+=candidates[i];
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        vector<int> v;
+        combinationSum(v,candidates,target,0);
+        return res;
+    }
+};
+
+//还有我自己写了一种，可惜超时了，答案是对的，原因在于复制了太多次
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        int num=candidates.size();
+        sort(candidates.begin(),candidates.end());
+        
+        vector<vector<int>> res;
+        
+        if(target<=0) return res;
+        
+        for(int i=0;i<num;i++){
+            if(candidates[i]==target){
+                vector<int> slu;
+                slu.push_back(candidates[i]);
+                res.push_back(slu);
+            }
+        }
+        
+        for(int i=0;i<num;i++){
+            vector<vector<int>> temp=combinationSum(candidates,target-candidates[i]);
+            vector<vector<int>>::iterator it;
+            for(it=temp.begin();it!=temp.end();it++){
+                //vector<int> lastslu;
+                //lastslu.insert(lastslu.end(),(*it).begin(),(*it).end());
+                if(candidates[i]<=(*it)[0]){
+                    vector<int> tempslu;
+                    tempslu.push_back(candidates[i]);
+                    tempslu.insert(tempslu.end(),(*it).begin(),(*it).end());
+                    res.push_back(tempslu);
+                }
+            }
+        }
+        
+        return res;
+    }
+};
