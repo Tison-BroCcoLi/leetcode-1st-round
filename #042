@@ -1,0 +1,36 @@
+//#042 trapping rain water
+//find the maxheight, if not in the middle, cal;
+//if in the middle ,divide the whole into two parts
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        return gettrap(height,0,height.size()-1);
+    }
+    
+    int gettrap(vector<int>& height, int start, int end){
+        if(end-start<2) return 0;
+        
+        int midmax=-1;
+        int midmaxpos=-1;
+        for(int i=start+1;i<end;i++){
+            if(height[i]>midmax){
+                midmax=height[i];
+                midmaxpos=i;
+            }
+        }
+        
+        if(midmax<height[start] && midmax<height[end]){
+            int trapsum=0;
+            int limit=height[start]<height[end]?height[start]:height[end];
+            for(int i=start+1;i<end;i++){
+                trapsum+=(limit-height[i]);
+            }
+            return trapsum;
+        }
+        
+        else{
+            return gettrap(height,start,midmaxpos)+gettrap(height,midmaxpos,end);
+        }
+    }
+};
