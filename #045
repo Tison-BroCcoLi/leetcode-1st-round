@@ -1,0 +1,34 @@
+//#045  Jump  Game II
+//思路：calculate the furthest position that n steps can get. for example, max(n)=max(j+A[j]) j is between max(n-2) and max(n-1)
+//complexity is O(n)
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int steps=0;
+        int len=nums.size();
+        int lastmaxpos=0;
+        int premaxpos=0;
+        
+        for(int i=0;i<len;i++){
+            if(premaxpos<len-1){
+                steps++;
+                
+                int advance=0;
+                for(int j=lastmaxpos;j<=premaxpos;j++){
+                    if(j+nums[j]>advance){
+                        advance=j+nums[j];
+                    }
+                }
+                lastmaxpos=premaxpos;
+                premaxpos=advance;
+            }
+            
+            else{
+                break;
+            }
+        }
+        
+        return steps;
+    }
+};
