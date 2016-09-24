@@ -1,0 +1,39 @@
+//#055 Jump Game
+//Like "Jump Game II", from the start, find the maxlen it can reach.
+
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int prevlen=0;
+        int maxlen=0;
+        bool res=false;
+        
+        int len=nums.size();
+        if(len==0 || len==1) return true;
+        while(prevlen<=maxlen){
+            int tempmax=0;
+            for(int i=prevlen;i<=maxlen;i++){
+                int temp=i+nums[i];
+                if(tempmax<temp) tempmax=temp;
+            }
+            
+            if(tempmax==maxlen){
+                res=false;
+                break;
+            }
+            else{
+                if(tempmax>=len-1){
+                    res=true;
+                    break;
+                }
+                else{
+                    prevlen=maxlen;
+                    maxlen=tempmax;
+                    continue;
+                }
+            }
+        }
+        
+        return res;
+    }
+};
