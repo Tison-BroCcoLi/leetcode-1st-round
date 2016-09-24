@@ -1,0 +1,61 @@
+//#056 Merge Intervals
+//sort by start first. Then add one by one
+
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    vector<Interval> merge(vector<Interval>& intervals) {
+        int len=intervals.size();
+        if(len<=1) return intervals;
+        
+        sort(intervals.begin(),intervals.end(),Cmp);
+        
+        vector<Interval> res;
+        res.push_back(intervals[0]);
+        for(int i=1;i<len;i++){
+            mergeone(res,intervals[i]);
+        }
+        
+        return res;
+    }
+    
+private:
+    static bool Cmp(Interval& a, Interval& b){
+        return a.start<b.start;
+    }
+    
+    void mergeone(vector<Interval>& res, Interval& a){
+        int i=res.size()-1;
+        
+        if(a.start==res[i].start){
+            if(a.end>=res[i].end){
+                res[i].end=a.end;
+                return;
+            }
+            else{
+                return;
+            }
+        }
+        else{
+            if(a.start<=res[i].end){
+                if(a.end<=res[i].end) return;
+                else{
+                    res[i].end=a.end;
+                    return;
+                }
+            }
+            else{
+                res.push_back(a);
+                return;
+            }
+        }
+    }
+};
