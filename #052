@@ -1,0 +1,31 @@
+//#052 N-Queens II
+//similar to #051
+
+class Solution {
+public:
+    int totalNQueens(int n) {
+		/*
+		flag[0] to flag[n - 1] to indicate if the column had a queen before.
+		flag[n] to flag[3 * n - 2] to indicate if the 45° diagonal had a queen before.
+		flag[3 * n - 1] to flag[5 * n - 3] to indicate if the 135° diagonal had a queen before.
+		*/
+		vector<int> flag(5 * n - 2, 1);
+		int count=0;
+		countNQueens(0, flag, count, n);
+		return count;
+    }
+private:
+	void countNQueens(int begin, vector<int>& flag, int& count, int n){
+		if(begin==n){
+		    count++;
+		    return;
+		}
+		for(int i=0;i<n;i++){
+		    if(flag[i] && flag[n+begin+i] && flag[3*n-1+begin+n-1-i]){
+		        flag[i]=flag[n+begin+i]=flag[3*n-1+begin+n-1-i]=0;
+		        countNQueens(begin+1,flag,count,n);
+		        flag[i]=flag[n+begin+i]=flag[3*n-1+begin+n-1-i]=1;
+		    }
+		}
+	}
+};
