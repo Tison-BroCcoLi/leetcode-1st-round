@@ -1,0 +1,108 @@
+//#057 Insert Interval
+//so many situations to discuss =-=
+
+/**
+ * Definition for an interval.
+ * struct Interval {
+ *     int start;
+ *     int end;
+ *     Interval() : start(0), end(0) {}
+ *     Interval(int s, int e) : start(s), end(e) {}
+ * };
+ */
+class Solution {
+public:
+    vector<Interval> insert(vector<Interval>& intervals, Interval newInterval) {
+        int len=intervals.size();
+        if(len==0){
+            intervals.push_back(newInterval);
+            return intervals;
+        }
+        
+        int begin=0;
+        while(begin<len){
+            if(newInterval.start>=intervals[begin].start){
+                begin++;
+                continue;
+            }
+            else{
+                break;
+            }
+        }
+        begin--;
+        
+        if((begin==len-1 || newInterval.end<intervals[begin+1].start) && begin!=-1){
+            if(newInterval.start<=intervals[begin].end){
+                if(newInterval.end<=intervals[begin].end) return intervals;
+                else{
+                    intervals[begin].end=newInterval.end;
+                }
+            }
+            else{
+                intervals.insert(intervals.begin()+begin+1,newInterval);
+            }
+        }
+        else{
+            if(begin==-1 || newInterval.start>intervals[begin].end){
+                int temp=begin+1;
+                int sign=0;
+                while(temp<len){
+                    if(newInterval.end<intervals[temp].start){
+                        break;
+                    }
+                    else{
+                        if(newInterval.end<=intervals[temp].end){
+                            sign=1;
+                            break;
+                        }
+                        else{
+                            temp++;
+                        }
+                    }
+                }
+                if(sign==0){
+                    if(begin==-1 && temp==0){
+                        intervals.insert(intervals.begin(),newInterval);
+                        return intervals;
+                    }
+                    intervals[begin+1].start=newInterval.start;
+                    intervals[begin+1].end=newInterval.end;
+                    intervals.erase(intervals.begin()+begin+2,intervals.begin()+temp);
+                }
+                else{
+                    intervals[begin+1].start=newInterval.start;
+                    intervals[begin+1].end=intervals[temp].end;
+                    intervals.erase(intervals.begin()+begin+2,intervals.begin()+temp+1);
+                }
+            }
+            else{
+                int temp=begin+1;
+                int sign=0;
+                while(temp<len){
+                    if(newInterval.end<intervals[temp].start){
+                        break;
+                    }
+                    else{
+                        if(newInterval.end<=intervals[temp].end){
+                            sign=1;
+                            break;
+                        }
+                        else{
+                            temp++;
+                        }
+                    }
+                }
+                if(sign==0){
+                    intervals[begin].end=newInterval.end;
+                    intervals.erase(intervals.begin()+begin+1,intervals.begin()+temp);
+                }
+                else{
+                    intervals[begin].end=intervals[temp].end;
+                    intervals.erase(intervals.begin()+begin+1,intervals.begin()+temp+1);
+                }
+            }
+        }
+        
+        return intervals;
+    }
+};
