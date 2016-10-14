@@ -1,0 +1,59 @@
+//#060 Permutation Sequence
+//use two vectors. one for saving the n!, the other one for saving marks that shows whether the number has been used
+//calculate the number one by one
+
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        string res(n, '1');
+        
+        if( n == 1 ) return res;
+        
+        vector<int> scaler;
+        int temp=1;
+        scaler.push_back(temp);
+        for(int i=1; i<n; i++){
+            temp*=i;
+            scaler.push_back(temp);
+        }
+        
+        k=k-1;
+        
+        vector<int> mark(n,0);
+        
+        int index=0;
+        while(index<n){
+            int ans=k/scaler[n-1-index];
+            k=k%scaler[n-1-index];
+            
+            int num=0;
+            
+            if(ans == 0){
+                while(mark[num] == 1){
+                    num++;
+                }
+                res[index]='1'+num;
+                mark[num]=1;
+                index++;
+                continue;
+            }
+            
+            int i=0;
+            while( i < ans ){
+                while(mark[num] == 1){
+                    num++;
+                }
+                num++;
+                i++;
+            }
+            while(mark[num] == 1){
+                num++;
+            }
+            res[index]='1'+num;
+            mark[num]=1;
+            index++;
+        }
+        
+        return res;
+    }
+};
