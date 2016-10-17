@@ -1,0 +1,43 @@
+//#061 Rotate List
+//two loops: the first one to get the len and the tail
+//           the second one to get the newhead and the newtail
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        int len=0;
+        ListNode* scan = head;
+        ListNode* tail = head;
+        while(scan != NULL){
+            len++;
+            tail = scan;
+            scan = scan -> next;
+        }
+        
+        if(len == 0) return head;
+        
+        k = k % len;
+        
+        if(k == 0) return head;
+        
+        ListNode* newhead = head;
+        ListNode* newtail = head;
+        for(int i = 0; i < len - k ; i++){
+            newtail = newhead;
+            newhead = newhead -> next;
+        }
+        
+        newtail -> next = NULL;
+        tail -> next = head;
+        
+        return newhead;
+    }
+};
