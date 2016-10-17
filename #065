@@ -1,0 +1,118 @@
+//#065 Valid Number
+//lots of conditions to figure out.
+//special marks: '.', '+', '-', 'e'
+
+class Solution {
+public:
+    bool isNumber(string s) {
+        int len = s.size();
+        if( len == 0 ) return false;
+        
+        int spacepos = 0;
+        
+        int numpos = 0;
+        
+        int dotpos = 0;
+        int dotnum = 0;
+        
+        int epos = 0;
+        int e_num = 0;
+        
+        int minuspos = 0;
+        int minusnum = 0;
+        
+        for( int i = 0; i < len; i++){
+            if(s[i] == ' '){
+                if(numpos + dotpos + epos + minuspos){
+                    spacepos = i+1;
+                    continue;
+                }
+                else{
+                    continue;
+                }
+            }
+            
+            if(s[i] <='9' && s[i]>='0'){
+                if(spacepos) return false;
+                
+                numpos = i+1;
+                continue;
+            }
+            
+            if(s[i] == '-' || s[i] == '+'){
+                if(spacepos) return false;
+                
+                if( !numpos ){
+                    if( !dotnum ){
+                        if( !minusnum ){
+                            minuspos = i+1;
+                            minusnum++;
+                            continue;
+                        }
+                        else{
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    if( epos > numpos ){
+                        minuspos = i+1;
+                        minusnum++;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                continue;
+            }
+            
+            if(s[i] == '.'){
+                if(spacepos) return false;
+                
+                if( !dotpos ){
+                    if( !epos ){
+                        dotpos = i+1;
+                        dotnum++;
+                        continue;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+                continue;
+            }
+            
+            if(s[i] == 'e'){
+                if(spacepos) return false;
+                
+                if( numpos ){
+                    if( !epos ){
+                        epos = i+1;
+                        e_num++;
+                        continue;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+                continue;
+            }
+            
+            else{
+                return false;
+            }
+        }
+        
+        if( numpos > epos ) return true;
+        else return false;
+    }
+};
