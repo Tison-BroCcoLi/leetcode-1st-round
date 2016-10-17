@@ -1,0 +1,28 @@
+//#064 Minumun Path Sum
+//still DP, O(mn)
+
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int m = grid.size();
+        if( m == 0 ) return 0;
+        
+        int n = grid[0].size();
+        if( n == 0 ) return 0;
+        
+        vector<int> tempres(n,0);
+        tempres[0] = grid[0][0];
+        for(int j=1; j<n; j++){
+            tempres[j] = tempres[j-1]+grid[0][j];
+        }
+        
+        for(int i=1; i<m; i++){
+            tempres[0] += grid[i][0];
+            for(int j=1; j<n; j++){
+                tempres[j] = min(tempres[j-1], tempres[j]) + grid[i][j];
+            }
+        }
+        
+        return tempres[n-1];
+    }
+};
