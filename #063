@@ -1,0 +1,35 @@
+//#063 Unique Paths II
+//dynamic programming: O(mn)
+
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid){
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        
+        vector<int> tempres(n,0);
+        
+        for( int i=0; i<n; i++){
+            if(!obstacleGrid[0][i]) tempres[i] = 1;
+            else break;
+        }
+        
+        for( int i=1; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(!obstacleGrid[i][j]){
+                    if( j == 0 ){
+                        continue;
+                    }
+                    else{
+                        tempres[j] = tempres[j-1] + tempres[j];
+                    }
+                }
+                else{
+                    tempres[j] = 0;
+                }
+            }
+        }
+        
+        return tempres[n-1];
+    }
+};
