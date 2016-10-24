@@ -1,0 +1,66 @@
+//#068 Text Justification
+//use an int variable to remember how many words the next line can have
+//input these words to the next string, be careful with the space
+//the last line need to be treated differently
+
+class Solution {
+public:
+    vector<string> fullJustify(vector<string>& words, int maxWidth) {
+        vector<string> res;
+        
+        int wlen = words.size();
+        if(wlen == 0) return res;
+        
+        int index = 0;
+        while(index < wlen){
+            string tempstr;
+            
+            int tindex = index;
+            int tlen = words[tindex++].size();
+            
+            while( tindex < wlen && tlen + words[tindex].size() + 1 <= maxWidth ){
+                tlen += words[tindex++].size() + 1;
+                if(tindex == wlen) break;
+            }
+            
+            int num = tindex - index;
+            int slen = 0;
+            for(int i=index; i<tindex; i++){
+                slen += words[i].size();
+            }
+            int leftspace = maxWidth - slen;
+            
+            if(tindex < wlen){
+                while(num > 1){
+                    string addspace;
+                    for(int i=0; i<leftspace/(num-1); i++) addspace += " ";
+                    leftspace -= leftspace/(num-1);
+                    tempstr = addspace + words[index+num-1] + tempstr;
+                    num--;
+                }
+                string lastspace;
+                for(int i=0; i<leftspace; i++) lastspace += " ";
+                tempstr = words[index] + lastspace + tempstr;
+            
+                res.push_back(tempstr);
+                index = tindex;
+            }
+            else{
+                while(num > 0){
+                    tempstr += words[tindex - num];
+                    num--;
+                    if(num > 0) tempstr += " ";
+                }
+                leftspace -= (tindex - index - 1);
+                string lastspace;
+                for(int i=0; i<leftspace; i++) lastspace += " ";
+                tempstr += lastspace;
+                
+                res.push_back(tempstr);
+                index = tindex;
+            }
+        }
+        
+        return res;
+    }
+};
