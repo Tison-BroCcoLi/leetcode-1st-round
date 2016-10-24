@@ -1,0 +1,46 @@
+//#067 Add Binary
+//first skip the first zeros
+//then add from the end to the start, skip the first zero if any
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int alen = a.size();
+        int blen = b.size();
+        
+        int astart = 0;
+        int bstart = 0;
+        
+        while(a[astart] == '0' && astart < alen) astart++;
+        while(b[bstart] == '0' && bstart < blen) bstart++;
+        
+        if(astart == alen && bstart == blen) return "0";
+        if(astart == alen){
+            string res = b.substr(bstart);
+            return res;
+        }
+        if(bstart == blen){
+            string res = a.substr(astart);
+            return res;
+        }
+        
+        int reslen = max(alen-astart+1, blen-bstart+1);
+        string res(reslen, '0');
+        
+        int index = reslen - 1;
+        int aindex = alen - 1;
+        int bindex = blen - 1;
+        int add = 0;
+        while( aindex >= astart || bindex >= bstart || add > 0){
+            int sum = 0;
+            if(aindex >= astart) sum += a[aindex--] - '0';
+            if(bindex >= bstart) sum += b[bindex--] - '0';
+            if(add > 0) sum += add;
+            res[index--] = sum%2 + '0';
+            add = sum/2;
+        }
+        if( res[0] == '0' ) res = res.substr(1);
+        
+        return res;
+    }
+};
