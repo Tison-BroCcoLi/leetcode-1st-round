@@ -1,0 +1,32 @@
+// #080 Remove Duplicates from Sorted Array II
+// Use two pointers: the first one indicate the tail of the array qualified
+//                   the second one indicate the head of the array to be checked
+
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if(nums.size() <= 2) return nums.size();
+        
+        int ans = 2;
+        int index = 2;
+        while(index < nums.size()){
+            if(nums[ans-2] != nums[ans-1]){
+                nums[ans] = nums[index];
+                ans++;
+                index++;
+            }
+            else{
+                if(nums[index] != nums[ans-1]){
+                    nums[ans] = nums[index];
+                    ans++;
+                    index++;
+                }
+                else{
+                    index++;
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
