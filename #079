@@ -1,0 +1,98 @@
+// #079 Word Search
+// backtrack solution: O(mn * len)
+
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int rows = board.size();
+        if(rows == 0) return false;
+        
+        int cols = board[0].size();
+        if(cols == 0) return false;
+        
+        int len = word.size();
+        if(len == 0) return false;
+        
+        int total = rows * cols;
+        
+        int startIndex = 0;
+        while(startIndex < total){
+            int startRow = startIndex / cols;
+            int startCol = startIndex % cols;
+            
+            if(board[startRow][startCol] != word[0]){
+                startIndex++;
+                continue;
+            }
+            else{
+                if(len == 1) return true;
+                
+                else{
+                    board[startRow][startCol] = ' ';
+                    if(check(board, word, startIndex, 1)) return true;
+                    else{
+                        board[startRow][startCol] = word[0];
+                        startIndex++;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+private:
+    bool check(vector<vector<char>>& board, string word, int index, int checknum){
+        if(checknum == word.size()) return true;
+        
+        int rows = board.size();
+        int cols = board[0].size();
+        //int total = rows * cols;
+        //int mark = index;
+        int m = index / cols;
+        int n = index % cols;
+        
+        //while(checknum < word.size()){
+        if(m > 0){
+            if(board[m-1][n] == word[checknum]){
+                board[m-1][n] = ' ';
+                if( check(board, word, index-cols, checknum+1) ) return true;
+                else{
+                    board[m-1][n] = word[checknum];
+                }
+            }
+        }
+            
+        if(n > 0){
+            if(board[m][n-1] == word[checknum]){
+                board[m][n-1] = ' ';
+                if( check(board, word, index-1, checknum+1) ) return true;
+                else{
+                    board[m][n-1] = word[checknum];
+                }
+            }
+        }
+        
+        if(m < rows-1){
+            if(board[m+1][n] == word[checknum]){
+                board[m+1][n] = ' ';
+                if( check(board, word, index+cols, checknum+1) ) return true;
+                else{
+                    board[m+1][n] = word[checknum];
+                }
+            }
+        }
+        
+        if(n < cols-1){
+            if(board[m][n+1] == word[checknum]){
+                board[m][n+1] = ' ';
+                if( check(board, word, index+1, checknum+1) ) return true;
+                else{
+                    board[m][n+1] = word[checknum];
+                }
+            }
+        }
+        
+        return false;
+    }
+};
