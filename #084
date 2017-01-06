@@ -1,0 +1,55 @@
+// #084 Largest Rectangle in Histogram
+// use two arrays to mark the left and the right margin of each rectangle
+// the trick here is for search the margin. use the previous searched margin
+// until it reaches the end of the vector.
+
+// tip: classic array is faster than vector class: 12ms for array while 15ms for vector
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int len = heights.size();
+        int* left = new int[len];
+        int* right = new int[len];
+        left[0] = -1;
+        right[len-1] = len;
+        
+        for(int i = 1; i < len; i++){
+            int index = i-1;
+            while(index > -1){
+                if(heights[i] > heights[index]){
+                    left[i] = index;
+                    break;
+                }
+                else{
+                    index = left[index];
+                }
+            }
+            
+            if(index == -1) left[i] = -1;
+        }
+        
+        for(int i = len-2; i >= 0; i--){
+            int index = i+1;
+            while(index < len){
+                if(heights[i] > heights[index]){
+                    right[i] = index;
+                    break;
+                }
+                else{
+                    index = right[index];
+                }
+            }
+            
+            if(index == len) right[i] = len;
+        }
+        
+        int res = 0;
+        for(int i = 0; i < len; i++){
+            int temp = heights[i] * (right[i] - left[i] - 1);
+            if(temp > res) res = temp;
+        }
+        
+        return res;
+    }
+};
