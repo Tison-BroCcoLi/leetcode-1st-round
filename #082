@@ -1,0 +1,40 @@
+// #082 Remove Duplicates from Sorted List II
+// Recursive: move to the first non-duplicate Node
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if(head == NULL) return head;
+        
+        else{
+            if(head->next == NULL) return head;
+            
+            else{
+                if(head->val != head->next->val){
+                    ListNode* next = deleteDuplicates(head->next);
+                    head->next = next;
+                    return head;
+                }
+                else{
+                    int dup = head->val;
+                    ListNode* scan = head->next;
+                    while(scan->next != NULL && scan->next->val == dup){
+                        scan = scan->next;
+                    }
+                    if(scan->next == NULL) return NULL;
+                    else{
+                        return deleteDuplicates(scan->next);
+                    }
+                }
+            }
+        }
+    }
+};
