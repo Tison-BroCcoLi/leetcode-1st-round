@@ -1,0 +1,38 @@
+// #086 Partition List
+// trick: create two NodeList first to skip the 'if-else' for judge the valid head
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        ListNode small = ListNode(0);
+        ListNode* smallTail = &small;
+        ListNode big = ListNode(0);
+        ListNode* bigTail = &big;
+        
+        ListNode* scan = head;
+        
+        while(scan){
+            if(scan->val < x){
+                smallTail = smallTail->next = scan;
+            }
+            else{
+                bigTail = bigTail->next = scan;
+            }
+            
+            scan = scan->next;
+        }
+        
+        bigTail->next = NULL;
+        smallTail->next = big.next;
+        
+        return small.next;
+    }
+};
