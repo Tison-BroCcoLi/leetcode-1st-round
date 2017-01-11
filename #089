@@ -1,0 +1,26 @@
+// #089 Gray Code
+// every iteration: reverse the existed vector, then add head '1' each
+
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        vector<int> res;
+        
+        int oper = 1;
+        
+        res.push_back(0);
+        int count = 1;
+        
+        for(int i = 1; i <= n; i++){
+            
+            for(int j = count - 1; j >= 0; j--){
+                res.push_back(oper | res[j]);
+            }
+            count *= 2;
+            
+            oper = oper << 1;
+        }
+        
+        return res;
+    }
+};
