@@ -1,0 +1,45 @@
+// #092 Reverse Linked List II
+// Simple idea
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        if(m == n) return head;
+        
+        ListNode newhead(0);
+        newhead.next = head; 
+        
+        ListNode* temptail = &newhead;
+        
+        int index = 0;
+        for(index = 1; index < m; index++){
+            temptail = temptail->next;
+        }
+        
+        ListNode* Nodem = temptail->next;
+        ListNode* Nodemp = Nodem->next;
+        ListNode* Nodempp = Nodemp->next;
+        
+        for(index; index < n; index++){
+            Nodemp->next = Nodem;
+            
+            Nodem = Nodemp;
+            Nodemp = Nodempp;
+            if(Nodemp == NULL) break;
+            Nodempp = Nodempp->next;
+        }
+        
+        temptail->next->next = Nodemp;
+        temptail->next = Nodem;
+        
+        return newhead.next;
+    }
+};
