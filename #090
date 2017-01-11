@@ -1,0 +1,33 @@
+// #090 Subset II
+// sort the array first
+// When next element is unique, add it to each of the existed subset
+// otherwise, add it * n(n = 1, 2, 3, ..., size) to each of the existed subset
+
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        
+        vector<vector<int>> res = {{}};
+        
+        for(int i = 0; i < nums.size(); ){
+            int templen = res.size();
+            
+            int count = 1;
+            while(i+count < nums.size() && nums[i+count] == nums[i]) count++;
+            
+            for(int j = 0; j < templen; j++){
+                vector<int> sub=res[j];
+                
+                for(int k = 0; k < count; k++){
+                    sub.push_back(nums[i]);
+                    res.push_back(sub);
+                }
+            }
+            
+            i += count;
+        }
+        
+        return res;
+    }
+};
