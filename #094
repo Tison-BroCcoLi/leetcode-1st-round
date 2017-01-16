@@ -1,0 +1,36 @@
+// #094 Binary Tree Inorder Traversal
+// iterative solution using stack
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        
+        stack<struct TreeNode*> node;
+        TreeNode* scan = root;
+        while(scan != NULL || !node.empty()){
+            if(scan == NULL){
+                scan = node.top();
+                node.pop();
+                res.push_back(scan->val);
+                scan = scan->right;
+                continue;
+            }
+            else{
+                node.push(scan);
+                scan = scan->left;
+            }
+        }
+        
+        return res;
+    }
+};
