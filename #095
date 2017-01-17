@@ -1,0 +1,49 @@
+// #095 Unique Binary Search Trees II
+// Recursive Solution
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> generateTrees(int n) {
+        if(n <= 0){
+            vector<TreeNode*> ans;
+            return ans;
+        }
+        
+        return subTrees(1, n);
+    }
+    
+private:
+    vector<TreeNode*> subTrees(int start, int end){
+        vector<TreeNode*> ans;
+        if(start > end){
+            struct TreeNode* root = NULL;
+            ans.push_back(root);
+            return ans;
+        }
+        
+        for(int i = start; i <= end; i++){
+            vector<TreeNode*> leftSub = subTrees(start, i-1);
+            vector<TreeNode*> rightSub = subTrees(i+1, end);
+            
+            for(int leftIdx = 0; leftIdx < leftSub.size(); leftIdx++){
+                for(int rightIdx = 0; rightIdx < rightSub.size(); rightIdx++){
+                    struct TreeNode* root = new TreeNode(i);
+                    root->left = leftSub[leftIdx];
+                    root->right = rightSub[rightIdx];
+                    ans.push_back(root);
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
