@@ -1,0 +1,47 @@
+// #098 Validate Binary Search Tree
+// In-order traversal ; using stack to avoid iteration
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        stack<TreeNode*> depos;
+        int prev = 0;
+        bool isvecempty = true;
+        
+        TreeNode* scan = root;
+        while(scan != NULL || !depos.empty()){
+            if(scan == NULL){
+                if(isvecempty){
+                    prev = depos.top()->val;
+                    scan = depos.top()->right;
+                    depos.pop();
+                    isvecempty = false;
+                }
+                else{
+                    if(depos.top()->val <= prev) return false;
+                    else{
+                        prev = depos.top()->val;
+                        scan = depos.top()->right;
+                        depos.pop();
+                    }
+                }
+            }
+            
+            else{
+                depos.push(scan);
+                scan = scan->left;
+            }
+        }
+        
+        return true;
+    }
+};
