@@ -1,0 +1,58 @@
+// #099 Recover Binary Search Tree
+// Morris Inorder Traversal
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        TreeNode* first = NULL;
+        TreeNode* second = NULL;
+        
+        TreeNode* prev = NULL;
+        TreeNode* curr = root;
+        
+        while(curr != NULL){
+            if(curr->left == NULL){
+                if(prev != NULL && prev->val > curr->val){
+                    if(first == NULL) first = prev;
+                    second = curr;
+                }
+                prev = curr;
+                curr = curr->right;
+            }
+            else{
+                TreeNode* temp;
+                temp = curr->left;
+                while(temp->right != NULL && temp->right != curr) temp = temp->right;
+                
+                if(temp->right == NULL){
+                    temp->right = curr;
+                    curr = curr->left;
+                }
+                else{
+                    if(prev != NULL && prev->val > curr->val){
+                        if(first == NULL) first = prev;
+                        second = curr;
+                    }
+                    prev = curr;
+                    temp->right = NULL;
+                    curr = curr->right;
+                }
+            }
+        }
+        
+        if(first != NULL && second != NULL){
+            int val = first->val;
+            first->val = second->val;
+            second->val = val;
+        }
+    }
+};
