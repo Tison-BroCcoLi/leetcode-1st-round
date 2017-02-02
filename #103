@@ -1,0 +1,56 @@
+// #103 Binary Tree Zigzag Order Traversal
+// using a queue
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        
+        if(root == NULL) return res;
+        
+        queue<TreeNode*> scan;
+        scan.push(root);
+        int level = 1;
+        while(!scan.empty()){
+            vector<int> eachline;
+            int num = scan.size();
+            
+            if(level%2){
+                while(num){
+                    TreeNode* temp = scan.front();
+                    scan.pop();
+                    eachline.push_back(temp->val);
+                    if(temp->left != NULL) scan.push(temp->left);
+                    if(temp->right != NULL) scan.push(temp->right);
+                    num--;
+                }
+                res.push_back(eachline);
+            }
+            else{
+                while(num){
+                    TreeNode* temp = scan.front();
+                    scan.pop();
+                    eachline.push_back(temp->val);
+                    if(temp->left != NULL) scan.push(temp->left);
+                    if(temp->right != NULL) scan.push(temp->right);
+                    num--;
+                }
+                reverse(eachline.begin(), eachline.end());
+                res.push_back(eachline);
+            }
+            
+            level++;
+        }
+        
+        return res;
+    }
+};
