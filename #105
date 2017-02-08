@@ -46,36 +46,28 @@ public:
 class Solution {
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        if(preorder.size() != inorder.size() || preorder.size() == 0) return NULL;
-        
-        stack<TreeNode*> myStack;
-        TreeNode* root = new TreeNode(0x80000000);
-        myStack.push(root);
-        TreeNode* prev = NULL;
-        int preIndex = 0;
-        int inIndex = 0;
-        while(inIndex < inorder.size()){
-            if(myStack.top()->val == inorder[inIndex]){
-                prev = myStack.top();
-                myStack.pop();
-                inIndex++;
+        if(preorder.empty()) return NULL;
+        int ppre = 0, pin = 0;
+        TreeNode* root = new TreeNode(preorder[ppre++]);
+        stack<TreeNode*> stk;
+        stk.push(root);
+        while(true) {
+            while(stk.top()->val != inorder[pin]) {
+                TreeNode* newnode = new TreeNode(preorder[ppre++]);
+                stk.top()->left = newnode;
+                stk.push(newnode);
             }
-            else if(prev){
-                TreeNode* temp = new TreeNode(preorder[preIndex]);
-                prev->right = temp;
-                prev = NULL;
-                myStack.push(temp);
-                preIndex++;
+            TreeNode* node;
+            while(!stk.empty() && stk.top()->val == inorder[pin]) {
+                node = stk.top();
+                stk.pop();
+                pin++;
             }
-            else{
-                TreeNode* temp = new TreeNode(preorder[preIndex]);
-                myStack.top()->left = temp;
-                myStack.push(temp);
-                preIndex++;
-            }
+            if(ppre == preorder.size()) break;
+            TreeNode* newnode = new TreeNode(preorder[ppre++]);
+            node->right = newnode;
+            stk.push(newnode);
         }
-        prev = root->left;
-        delete root;
-        return prev;
+        return root;
     }
 };
