@@ -1,0 +1,81 @@
+// #105 Construct Binary Tree
+// Recursive one : 43ms
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.size() != inorder.size() || preorder.size() == 0) return NULL;
+        
+        return buildSubTree(preorder, inorder, 0, preorder.size(), 0);
+    }
+    
+    TreeNode* buildSubTree(vector<int>& preorder, vector<int> inorder, int preBegin, int preLen, int inBegin){
+        if(preLen == 0) return NULL;
+        
+        TreeNode* root = new TreeNode(preorder[preBegin]);
+        
+        vector<int>::iterator it = find(inorder.begin()+inBegin, inorder.begin()+inBegin+preLen, preorder[preBegin]);
+        
+        int index = it - inorder.begin() - inBegin;
+        
+        root->left = buildSubTree(preorder, inorder, preBegin+1, index, inBegin);
+        root->right = buildSubTree(preorder, inorder, preBegin+index+1, preLen-index-1, inBegin+index+1);
+        
+        return root;
+    }
+};
+
+// iterative one: 9ms
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.size() != inorder.size() || preorder.size() == 0) return NULL;
+        
+        stack<TreeNode*> myStack;
+        TreeNode* root = new TreeNode(0x80000000);
+        myStack.push(root);
+        TreeNode* prev = NULL;
+        int preIndex = 0;
+        int inIndex = 0;
+        while(inIndex < inorder.size()){
+            if(myStack.top()->val == inorder[inIndex]){
+                prev = myStack.top();
+                myStack.pop();
+                inIndex++;
+            }
+            else if(prev){
+                TreeNode* temp = new TreeNode(preorder[preIndex]);
+                prev->right = temp;
+                prev = NULL;
+                myStack.push(temp);
+                preIndex++;
+            }
+            else{
+                TreeNode* temp = new TreeNode(preorder[preIndex]);
+                myStack.top()->left = temp;
+                myStack.push(temp);
+                preIndex++;
+            }
+        }
+        prev = root->left;
+        delete root;
+        return prev;
+    }
+};
