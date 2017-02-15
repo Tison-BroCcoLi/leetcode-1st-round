@@ -1,0 +1,31 @@
+// #108 Covert Sorted Array to Binary Search Tree
+// recursive solution using help function
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
+        int end = nums.size()-1;
+        
+        return buildSubTree(nums, 0, end);
+    }
+    
+    TreeNode* buildSubTree(vector<int>& nums, int start, int end){
+        if(end < start) return NULL;
+        
+        int mid = (start + end + 1) / 2;
+        TreeNode* root = new TreeNode(nums[mid]);
+        root->left = buildSubTree(nums, start, mid-1);
+        root->right = buildSubTree(nums, mid+1, end);
+        
+        return root;
+    }
+};
