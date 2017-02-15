@@ -1,0 +1,51 @@
+// #107 Binary Tree Level Order Traversal II
+// do level order traversal first, then reverse the result
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>> res;
+        vector<vector<int>> temp;
+        
+        TreeNode* scan = root;
+        stack<TreeNode*> stk;
+        stack<int> lvstk;
+        int level = 0;
+        int maxlevel = 0;
+        
+        while(scan != NULL || !stk.empty()){
+            if(scan != NULL){
+                if(level == maxlevel){
+                    vector<int> line;
+                    temp.push_back(line);
+                    maxlevel++;
+                }
+                temp[level].push_back(scan->val);
+                stk.push(scan);
+                lvstk.push(level);
+                scan = scan->left;
+                level++;
+            }
+            else{
+                scan = stk.top()->right;
+                stk.pop();
+                level = lvstk.top()+1;
+                lvstk.pop();
+            }
+        }
+        
+        for(int i = temp.size()-1; i >= 0; i--){
+            res.push_back(temp[i]);
+        }
+        return res;
+    }
+};
