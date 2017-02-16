@@ -1,0 +1,42 @@
+// #115 Distinct Subsequences
+// DP solution
+
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        int slen = s.size();
+        int tlen = t.size();
+        
+        if(slen < tlen) return 0;
+        if(tlen == 0) return 1;
+        
+        int* num = new int[slen];
+        if(s[0] == t[0]) num[0] = 1;
+        else num[0] = 0;
+        for(int i = 1; i < slen; i++){
+            if(s[i] == t[0]) num[i] = num[i-1]+1;
+            else num[i] = num[i-1];
+        }
+        
+        for(int i = 1; i < tlen; i++){
+            int temp = num[i];
+            
+            if(s[i] == t[i]) num[i] = num[i-1];
+            else num[i] = 0;
+            
+            for(int j = i+1; j < slen; j++){
+                if(s[j] == t[i]){
+                    int tempres = num[j-1] + temp;
+                    temp = num[j];
+                    num[j] = tempres;
+                }
+                else{
+                    temp = num[j];
+                    num[j] = num[j-1];
+                }
+            }
+        }
+        
+        return num[slen-1];
+    }
+};
