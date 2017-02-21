@@ -1,0 +1,29 @@
+// #121 Best Time to Buy and Sell Stock
+// DP solution
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if(prices.size() <= 1) return 0;
+        
+        int len = prices.size();
+        int buyTime = 0;
+        while(buyTime < len - 1){
+            if(prices[buyTime] > prices[buyTime+1]) buyTime++;
+            else break;
+        }
+        
+        if(buyTime == len - 1) return 0;
+        
+        int res = prices[buyTime+1] - prices[buyTime];
+        int minPrice = prices[buyTime];
+        
+        for(int i = buyTime+2; i < len; i++){
+            if(prices[i] < minPrice) minPrice = prices[i];
+            
+            if(prices[i] - minPrice > res) res = prices[i] - minPrice;
+        }
+        
+        return res;
+    }
+};
