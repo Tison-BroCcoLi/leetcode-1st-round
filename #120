@@ -1,0 +1,36 @@
+// #120 Triangle
+
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int rows = triangle.size();
+        
+        if(rows == 0) return 0;
+        if(rows == 1) return triangle[0][0];
+        
+        int* num = new int[rows];
+        
+        num[0] = triangle[0][0];
+        
+        for(int i = 1; i < rows; i++){
+            int temp1 = num[0];
+            num[0] += triangle[i][0];
+            
+            for(int j = 1; j < i; j++){
+                int temp2 = num[j];
+                num[j] = min(temp1, num[j]) + triangle[i][j];
+                temp1 = temp2;
+            }
+            
+            num[i] = temp1 + triangle[i][i];
+        }
+        
+        int res = num[0];
+        
+        for(int i = 1; i < rows; i++){
+            res = num[i] < res ? num[i] : res;
+        }
+        
+        return res;
+    }
+};
