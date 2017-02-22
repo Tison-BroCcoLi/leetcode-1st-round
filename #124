@@ -1,0 +1,32 @@
+// #124 Binary Tree Maximum Path Sum
+// recursive solution
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPathSum(TreeNode* root) {
+        int maxValue = INT_MIN;
+        maxtoRoot(root, maxValue);
+        return maxValue;
+    }
+    
+private:
+    int maxtoRoot(TreeNode* root, int& maxValue){
+        if(root == NULL) return 0;
+        
+        int l = maxtoRoot(root->left, maxValue);
+        int r = maxtoRoot(root->right, maxValue);
+        if(l < 0) l = 0;
+        if(r < 0) r = 0;
+        if(l + r + root->val > maxValue) maxValue = l + r + root->val;
+        return root->val + max(l, r);
+    }
+};
