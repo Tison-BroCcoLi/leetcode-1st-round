@@ -1,0 +1,39 @@
+// #125 Valid Palindrome
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        if(s.empty()) return true;
+        
+        int head = 0;
+        int tail = s.size() - 1;
+        
+        while(head < tail){
+            int h = 0;
+            int t = 0;
+            while(s[head] < 48 || s[head] > 57 && s[head] < 65 || s[head] > 90 && s[head] < 97 || s[head] > 122){
+                head++;
+                if(head == tail) return true;
+            }
+            
+            if(s[head] >= 97) h =  s[head] - 32;
+            else h = s[head];
+            
+            while(s[tail] < 48 || s[tail] > 57 && s[tail] < 65 || s[tail] > 90 && s[tail] < 97 || s[tail] > 122){
+                tail--;
+                if(head == tail) return true;
+            }
+            
+            if(s[tail] >= 97) t = s[tail] - 32;
+            else t = s[tail];
+            
+            if(h != t) return false;
+            else{
+                head++;
+                tail--;
+            }
+        }
+        
+        return true;
+    }
+};
