@@ -1,0 +1,46 @@
+// #129 Sum Root to Leaf Numbers
+// using queue, O(n)
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int sumNumbers(TreeNode* root) {
+        int sum = 0;
+        if(root == NULL) return sum;
+        
+        queue<TreeNode* > nodeQueue;
+        nodeQueue.push(root);
+        while(!nodeQueue.empty()){
+            TreeNode* scan = nodeQueue.front();
+            nodeQueue.pop();
+            
+            if(scan->left){
+                scan->left->val += scan->val * 10;
+                nodeQueue.push(scan->left);
+                if(scan->right){
+                    scan->right->val += scan->val * 10;
+                    nodeQueue.push(scan->right);
+                }
+            }
+            else{
+                if(scan->right){
+                    scan->right->val += scan->val * 10;
+                    nodeQueue.push(scan->right);
+                }
+                else{
+                    sum += scan->val;
+                }
+            }
+        }
+        
+        return sum;
+    }
+};
