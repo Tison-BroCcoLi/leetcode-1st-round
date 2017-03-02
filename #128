@@ -1,0 +1,26 @@
+// #128 Longest Consective Sequence
+// using hash_map to get O(1) in each iteration
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_map<int, int> myHashMap;
+        
+        int res = 0;
+        for(int n : nums){
+            if(myHashMap.find(n) == myHashMap.end()){
+                int left = (myHashMap.find(n-1) == myHashMap.end())? 0 : myHashMap[n-1];
+                int right = (myHashMap.find(n+1) == myHashMap.end())? 0 : myHashMap[n+1];
+                int len = left + right + 1;
+                myHashMap[n] = len;
+                
+                res = max(res, len);
+                
+                myHashMap[n-left] = len;
+                myHashMap[n+right] = len;
+            }
+        }
+        
+        return res;
+    }
+};
