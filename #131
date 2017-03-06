@@ -1,0 +1,61 @@
+// #131 Palindrome Partitioning
+// DP solution
+
+class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> res;
+        if(s.size() < 1) return res;
+        
+        vector<string> line;
+        line.push_back(s.substr(0,1));
+        res.push_back(line);
+        
+        vector<int> nums;
+        nums.push_back(1);
+        
+        for(int i = 1; i < s.size(); i++){
+            for(int k = 0; k < nums[i-1]; k++){
+                res[k].push_back(s.substr(i,1));
+            }
+            
+            for(int j = i-1; j > 0; j--){
+                string check = s.substr(j, i-j+1);
+                if(isPalind(check)){
+                    for(int k = 0; k < nums[j-1]; k++){
+                        vector<string> line(res[k].begin(), res[k].end()-(i-j+1));
+                        line.push_back(check);
+                        res.push_back(line);
+                    }
+                }
+            }
+            
+            string full = s.substr(0,i+1);
+            if(isPalind(full)){
+                vector<string> last;
+                last.push_back(full);
+                res.push_back(last);
+            }
+            
+            nums.push_back(res.size());
+        }
+        
+        return res;
+    }
+    
+private:
+    bool isPalind(string s){
+        int h = 0;
+        int t = s.size() - 1;
+        
+        while(h <= t){
+            if(s[h] == s[t]){
+                h++;
+                t--;
+            }
+            else return false;
+        }
+        
+        return true;
+    }
+};
