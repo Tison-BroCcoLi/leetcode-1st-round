@@ -1,0 +1,54 @@
+// #134 Gas Station
+
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int num = gas.size();
+        
+        vector<int> add;
+        for(int i = 0; i < num; i++){
+            add.push_back(gas[i] - cost[i]);
+        }
+        
+        int start = 0;
+        while(add[start] < 0){
+            start++;
+            if(start == num) return -1;
+        }
+        
+        int des = start + num;
+        int left = add[start];
+        int idx = start + 1;
+        
+        while(idx < des){
+            left += add[idx%num];
+            
+            if(left < 0){
+                while(left < 0 && start <= idx){
+                    left -= add[start];
+                    start++;
+                    if(start == num) return -1;
+                }
+                if(start <= idx){
+                    des = start + num;
+                    idx = start + 1;
+                }
+                else{
+                    while(add[start] < 0){
+                        start++;
+                        if(start == num) return -1;
+                    }
+                    des = start + num;
+                    left = add[start];
+                    idx = start + 1;
+                }
+            }
+            
+            else{
+                idx++;
+            }
+        }
+        
+        if(idx == des) return start;
+    }
+};
