@@ -24,7 +24,10 @@ public:
             for(int j = 0; j < i; j++){
                 if(res[j] == 1){
                     string tailStr = s.substr(j, i-j);
-                    if(myMap.find(tailStr) != myMap.end()) res[i] = 1;
+                    if(myMap.find(tailStr) != myMap.end()){
+                        res[i] = 1;
+                        break;
+                    }
                 }
             }
         }
