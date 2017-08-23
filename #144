@@ -1,0 +1,36 @@
+//#144 Binary Tree Preorder Traversal
+// use a stack
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        if(root == NULL) return res;
+        
+        stack<struct TreeNode*> myStack;
+        TreeNode* scan = root;
+        while(scan != NULL || !myStack.empty()){
+            if(scan == NULL){
+                scan = myStack.top();
+                myStack.pop();
+                continue;
+            }
+            else{
+                res.push_back(scan->val);
+                myStack.push(scan->right);
+                scan = scan->left;
+            }
+        }
+        
+        return res;
+    }
+};
