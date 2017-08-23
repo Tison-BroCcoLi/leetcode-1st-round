@@ -1,5 +1,5 @@
 //#143 Reorder List
-// O(n)
+// O(n) split list to two halves, then reverse the right half. finally, combine the two half lists.
 
 /**
  * Definition for singly-linked list.
