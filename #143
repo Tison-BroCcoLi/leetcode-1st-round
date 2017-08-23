@@ -1,0 +1,68 @@
+//#143 Reorder List
+// O(n)
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if(head == NULL) return;
+        if(head->next == NULL) return;
+        
+        int listLen = 0;
+        ListNode* scan = head;
+        while(scan != NULL){
+            scan = scan->next;
+            listLen++;
+        }
+        
+        int halfLen = (listLen + 1) / 2;
+        
+        ListNode* rightHalf = head;
+        ListNode* leftHalf = head;
+        for(int i = 0; i < halfLen; i++){
+            leftHalf = rightHalf;
+            rightHalf = rightHalf->next;
+        }
+        leftHalf ->next = NULL;
+        
+        ListNode* rightPrev = rightHalf;
+        ListNode* rightScan = rightHalf->next;
+        rightPrev->next = NULL;
+        while(rightScan != NULL){
+            ListNode* temp = rightScan;
+            rightScan = rightScan->next;
+            temp->next = rightPrev;
+            rightPrev = temp;
+        }
+        
+        ListNode* leftList = head;
+        ListNode* rightList = rightPrev;
+        int listScan = 1;
+        ListNode* res = leftList;
+        ListNode* resScan = res;
+        leftList = leftList->next;
+        while(listScan < listLen){
+            if(listScan % 2 == 1){
+                resScan->next = rightList;
+                resScan = resScan->next;
+                rightList = rightList->next;
+            }
+            else{
+                resScan->next = leftList;
+                resScan = resScan->next;
+                leftList = leftList->next;
+            }
+            
+            listScan++;
+        }
+        
+        head = res;
+    }
+};
